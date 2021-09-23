@@ -2,20 +2,24 @@ window.onload = function(){
   inicioJogo();
   document.querySelector('#subir').addEventListener("click", function(){
     subir();
+    setTimeout(parar, 1000);
   });
   document.querySelector('#esquerda').addEventListener("click", function(){
     esquerda();
+    setTimeout(parar, 1000);
   });
   document.querySelector('#direita').addEventListener("click", function(){
     direita();
+    setTimeout(parar, 1000);
   });
   document.querySelector('#descer').addEventListener("click", function(){
     descer();
+    setTimeout(parar, 1000);
   });
 }
 
 var personagemObj;
-var obstaculo;
+var obstaculo = [];
 
 function inicioJogo(){
   areaJogo.start();
@@ -29,6 +33,7 @@ let areaJogo = {
     this.canvas.height = 400,
     this.context = this.canvas.getContext("2d");
     document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+    this.frame = 0;
     this.intervalo = setInterval(atualizaAreaJogo, 20)
   },
   limpar: function(){
@@ -79,14 +84,29 @@ function componente(cor, x, y, largura, altura) {
 }
 
 function atualizaAreaJogo(){
-  if(personagemObj.bater(obstaculo)){
-    areaJogo.parar();
-  }else{
-    areaJogo.limpar();
-    obstaculo.atualiza();
-    personagemObj.novaPosicao();
-    personagemObj.atualiza();
+  let x, y;
+  for(i = 0; i < obstaculo.length; i++)
+  {
+    if(personagemObj.bater(obstaculo[i])){
+      areaJogo.parar();
+      return;
+    }
   }
+    areaJogo.limpar();
+    areaJogo.frame += 1;
+    if(areaJogo.frame == 1 || contarIntervalo(150)){
+      x = areaJogo.canvas.width;
+      y = areaJogo.canvas.height - 200;
+      obstaculo.push(new componente('green', x, y, 120, 10));
+    }
+    for(i = 0; obstaculo.length; i++){
+      obstaculo[i].x += -1;
+      obstaculo[i].atualiza();
+    }
+    for(i = 0; obstaculo.length; i++){
+      personagemObj.novaPosicao();
+      personagemObj.atualiza();
+    }
 }
 
 function subir(){
@@ -103,4 +123,17 @@ function direita(){
 
 function esquerda(){
   personagemObj.velocidadeX -= 1;
+}
+
+function parar (){
+  personagemObj.velocidadeX = 0;
+  personagemObj.velocidadeY = 0;
+}
+
+function contarIntervalo(n){
+  if((areaJogo.frame / n) % 1 == 0){
+    return true;
+  }else{
+    return false;
+  }
 }
