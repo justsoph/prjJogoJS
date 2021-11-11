@@ -1,5 +1,43 @@
 window.onload = function(){
   inicioJogo();
+
+  function config(){
+    let claro = {
+      canva: "#FFF",
+      body: "#CCC",
+      botao: "#000"
+    }
+    localStorage.setItem("claro", JSON.stringify(claro));
+
+    let escuro = {
+      canva: "#CCC",
+      body: "#000",
+      botao: "#FFF"
+    }
+    localStorage.setItem("escuro", JSON.stringify(escuro));
+  }
+  
+  config();
+
+  document.querySelector('#cor').addEventListener("click", function(){
+    document.querySelector('#Descer').style.color = "#000000"
+    document.querySelector('#Subir').style.color = "#000000"
+    document.querySelector('#Esquerda').style.color = "#000000"
+    document.querySelector('#Direita').style.color = "#000000";
+    document.querySelector('body').style.backgroundColor = "white";
+    document.querySelector('canvas').style.backgroundColor = "white";
+  });
+
+  document.querySelector('#cor2').addEventListener("click", function(){
+    document.querySelector('#Descer').style.color = "#DCDCDC"
+    document.querySelector('#Subir').style.color = "#DCDCDC"
+    document.querySelector('#Esquerda').style.color = "#DCDCDC"
+    document.querySelector('#Direita').style.color = "#DCDCDC";
+    document.querySelector('body').style.backgroundColor = "black";
+    document.querySelector('canvas').style.backgroundColor = "black";
+  });
+
+
   document.querySelector('#subir').addEventListener("click", function(){
     subir();
     setTimeout(parar, 1000);
@@ -25,7 +63,7 @@ var pontos;
 
 function inicioJogo(){
   areaJogo.start();
-  personagemObj = new componente("#C76EFF", 10, 120, 30, 30);
+  personagemObj = new componente("#EB4272", 10, 120, 30, 30);
   pontos = new componente ("#FFF", 0, 290, 'Consolas', '30px', 'texto');
 }
 
@@ -99,34 +137,35 @@ function atualizaAreaJogo(){
   for(i = 0; i < obstaculo.length; i++)
   {
     if(personagemObj.bater(obstaculo[i])){
+      document.querySelector('canvas').style.backgroundImage = "url(https://media1.giphy.com/media/SIPIe590rx6iA/giphy.gif?cid=ecf05e47wmmjyx2noghgen8s1lz2dpkjbfkornkmhqxsvybb&rid=giphy.gif&ct=g)";
       areaJogo.parar();
       return;
     }
   }
-    areaJogo.limpar();
-    areaJogo.frame += 1;
+  areaJogo.limpar();
+  areaJogo.frame += 1;
 
-    if(areaJogo.frame == 1 || contarIntervalo(150)){
-      x = areaJogo.canvas.width;
-      minAltura = 20;
-      maxAltura = 200;
-      altura = Math.floor(Math.random() * (maxAltura - minAltura + 1) + minAltura)
-      minVazio = 50;
-      maxVazio = 200;
-      vazio = Math.floor(Math.random() * (maxVazio - minVazio + 1) + minVazio)
-      obstaculo.push(new componente('#70C7A7', x, 0, altura, 10));
-      obstaculo.push(new componente('#70C7A7', x, altura + vazio, x - altura - vazio, 10));
-    }
+  if(areaJogo.frame == 1 || contarIntervalo(150)){
+    x = areaJogo.canvas.width;
+    minAltura = 20;
+    maxAltura = 200;
+    altura = Math.floor(Math.random() * (maxAltura - minAltura + 1) + minAltura)
+    minVazio = 50;
+    maxVazio = 200;
+    vazio = Math.floor(Math.random() * (maxVazio - minVazio + 1) + minVazio)
+    obstaculo.push(new componente('#70C7A7', x, 0, altura, 10));
+    obstaculo.push(new componente('#70C7A7', x, altura + vazio, x - altura - vazio, 10));
+  }
 
-    for(i = 0; i < obstaculo.length; i++){
-      obstaculo[i].x += -1;
-      obstaculo[i].atualiza();
-    }
+  for(i = 0; i < obstaculo.length; i++){
+    obstaculo[i].x += -1;
+    obstaculo[i].atualiza();
+  }
 
-    pontos.texto = "Pontos: " + areaJogo.frame;
-    pontos.atualiza();
-    personagemObj.novaPosicao();
-    personagemObj.atualiza();
+  pontos.texto = "Pontos: " + areaJogo.frame;
+  pontos.atualiza();
+  personagemObj.novaPosicao();
+  personagemObj.atualiza();
 }
 
 function subir(){
