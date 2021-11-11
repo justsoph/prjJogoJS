@@ -4,7 +4,7 @@ window.onload = function(){
   function config(){
     let claro = {
       canva: "#FFF",
-      body: "#CCC",
+      body: "#FFF",
       botao: "#000"
     }
     localStorage.setItem("claro", JSON.stringify(claro));
@@ -12,7 +12,7 @@ window.onload = function(){
     let escuro = {
       canva: "#CCC",
       body: "#000",
-      botao: "#FFF"
+      botao: "#000"
     }
     localStorage.setItem("escuro", JSON.stringify(escuro));
   }
@@ -20,21 +20,25 @@ window.onload = function(){
   config();
 
   document.querySelector('#cor').addEventListener("click", function(){
-    document.querySelector('#Descer').style.color = "#000000"
-    document.querySelector('#Subir').style.color = "#000000"
-    document.querySelector('#Esquerda').style.color = "#000000"
-    document.querySelector('#Direita').style.color = "#000000";
-    document.querySelector('body').style.backgroundColor = "white";
-    document.querySelector('canvas').style.backgroundColor = "white";
+    let temas = JSON.parse(localStorage.getItem("claro"));
+    document.querySelector("body").style.background = temas.body;
+    document.querySelector("canvas").style.background = temas.canvas;
+
+    const botao = document.querySelectorAll(".seta");
+    Array.prototype.filter.call(botao, function(botao){
+      botao.style.color = temas.botao;
+    })
   });
 
   document.querySelector('#cor2').addEventListener("click", function(){
-    document.querySelector('#Descer').style.color = "#DCDCDC"
-    document.querySelector('#Subir').style.color = "#DCDCDC"
-    document.querySelector('#Esquerda').style.color = "#DCDCDC"
-    document.querySelector('#Direita').style.color = "#DCDCDC";
-    document.querySelector('body').style.backgroundColor = "black";
-    document.querySelector('canvas').style.backgroundColor = "black";
+    let temas  = JSON.parse(localStorage.getItem("escuro"));
+    document.querySelector("body").style.background = temas.body;
+    document.querySelector("canvas").style.background = temas.canvas;
+
+    const botao = document.querySelectorAll(".seta");
+    Array.prototype.filter.call(botao, function(botao){
+      botao.style.color = temas.botao;
+    })
   });
 
 
